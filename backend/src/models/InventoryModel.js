@@ -43,14 +43,15 @@ const InventoryModel = {
     );
   },
 
-  async findOne({ bankId, bloodGroup, componentType }) {
+  async findOne({ bankId, bloodGroup, componentType }, connection) {
     const rows = await query(
       `SELECT *,
               (units_available - reserved_units) AS available_units
        FROM blood_inventory
        WHERE bank_id = ? AND blood_group = ? AND component_type = ?
        LIMIT 1`,
-      [bankId, bloodGroup, componentType]
+      [bankId, bloodGroup, componentType],
+      connection
     );
 
     return rows[0] || null;
